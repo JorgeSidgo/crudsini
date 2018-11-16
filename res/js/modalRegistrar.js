@@ -43,13 +43,6 @@ Vue.component('modal-registrar', {
             scrollbar:true
         }); */
     },
-    updated() {
-        for (let index = 0; index < this.campos.length; index++) {
-            if (this.campos[index].selected == undefined) {} else {
-
-            }
-        }
-    },
 
     methods: {
         registrar() {

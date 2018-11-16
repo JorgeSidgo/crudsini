@@ -17,8 +17,46 @@ class DaoUsuario extends DaoBase {
         
     }
  */
+
+    public function cargarDatosUsuario() {
+        $_query = "select u.*, r.descRol, a.descAuth
+        from usuario u
+        inner join rol r on r.codigoRol = u.codigoRol
+        inner join authUsuario a on a.codigoAuth = u.codigoAuth
+        where u.codigoUsuario = ".$this->objeto->getCodigoUsuario();
+
+        $resultado = $this->con->query($_query);
+
+        $json = json_encode($resultado->fetch_assoc());
+
+        return $json;
+    }
+
     public function registrar() {
         $_query = "call registrarUsuario('".$this->objeto->getNombre()."', '".$this->objeto->getApellido()."','".$this->objeto->getNomUsuario()."', '".$this->objeto->getEmail()."', '".$this->objeto->getPass()."', ".$this->objeto->getCodigoRol().")";
+
+        $resultado = $this->con->query($_query);
+
+        if($resultado) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    public function autorizar() {
+        $_query = "update usuario set codigoAuth = 1 where codigoUsuario = ".$this->objeto->getCodigoUsuario();
+        $resultado = $this->con->query($_query);
+
+        if($resultado) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    public function editar() {
+        $_query = "call editarUsuario('".$this->objeto->getNombre()."', '".$this->objeto->getApellido()."','".$this->objeto->getNomUsuario()."', '".$this->objeto->getEmail()."', ".$this->objeto->getCodigoRol().", ".$this->objeto->getCodigoUsuario().")";
 
         $resultado = $this->con->query($_query);
 

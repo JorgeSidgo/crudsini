@@ -42,6 +42,44 @@ class UsuarioController extends ControladorBase {
      
     }
 
+    public function editar() {
+        $datos = $_REQUEST["datos"];
+
+        $datos = json_decode($datos);
+
+        $dao = new DaoUsuario();
+
+        $dao->objeto->setNombre($datos->nombre);
+        $dao->objeto->setApellido($datos->apellido);
+        $dao->objeto->setNomUsuario($datos->user);
+        $dao->objeto->setEmail($datos->correo);
+        $dao->objeto->setCodigoRol($datos->rol);
+        $dao->objeto->setCodigoUsuario($datos->idDetalle);
+
+        echo $dao->editar();
+     
+    }
+
+    public function autorizar() {
+        $id = $_REQUEST["id"];
+
+        $dao = new DaoUsuario();
+
+        $dao->objeto->setCodigoUsuario($id);
+
+        echo $dao->autorizar();
+    }
+
+    public function cargarDatosUsuario() {
+        $id = $_REQUEST["id"];
+
+        $dao = new DaoUsuario();
+
+        $dao->objeto->setCodigoUsuario($id);
+
+        echo $dao->cargarDatosUsuario();
+    }
+
     public function eliminar() {
         $datos = $_REQUEST["id"];
 

@@ -83,7 +83,7 @@ Vue.component('modal-editar', {
                 .then(val => {
                     if (val == 1) {
                         swal({
-                            title: 'Exceleeente',
+                            title: 'Modificado',
                             text: 'Los cambios han sido guardados',
                             type: 'success',
                             showConfirmButton: false,

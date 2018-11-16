@@ -1,12 +1,36 @@
 <div id="app">
-<modal-registrar id_form="frmRegistrar" id="modalRegistrar" url="?1=UsuarioController&2=registrar" titulo="Registrar Usuario"
+
+    <modal-registrar id_form="frmRegistrar" id="modalRegistrar" url="?1=UsuarioController&2=registrar" titulo="Registrar Usuario"
         :campos="campos_registro" tamanio='tiny'></modal-registrar>
 
-<modal-editar id_form="frmEditar" id="modalEditar" url="" titulo="Editar Institucion"
+    <modal-editar id_form="frmEditar" id="modalEditar" url="?1=UsuarioController&2=editar" titulo="Editar Usuario"
         :campos="campos_editar" tamanio='tiny'></modal-editar>
 
-    <modal-eliminar id_form="frmEliminar" id="modalEliminar" url="?1=UsuarioController&2=eliminar" titulo="Eliminar Institucion"
+    <modal-eliminar id_form="frmEliminar" id="modalEliminar" url="?1=UsuarioController&2=eliminar" titulo="Eliminar Usuario"
         sub_titulo="¿Está seguro de querer eliminar este usuario?" :campos="campos_eliminar" tamanio='tiny'></modal-eliminar>
+
+    <div class="ui tiny modal" id="modalAutorizar">
+
+        <div class="header">
+            Autorizar Usuario
+        </div>
+        <div class="content">
+            <h4>¿Desea autorizar este usuario para ingresar al sistema?</h4>        
+            <input type="hidden" id="idAutorizar" name="idAutorizar">
+        </div>
+
+        <div class="actions">
+            <button class="ui black deny button">
+                Cancelar
+            </button>
+            <button id="btnAutorizar" class="ui right yellow button">
+                Autorizar
+            </button>
+        </div>
+    </div>
+
+
+
 
     <div class="ui grid">
         <div class="row">
@@ -88,53 +112,50 @@ var app = new Vue({
                     label: 'Rol:',
                     name: 'rol',
                     type: 'select',
-                    options: [{
-                            val: 1,
-                            text: 'Administrador'
-                        },
+                    options: [
                         {
                             val: 2,
                             text: 'Solicitante'
-                        }
+                        },
+                        {
+                            val: 1,
+                            text: 'Administrador'
+                        },
                     ]
                 }
             ],
             campos_editar: [
-            {
+                {
                     label: 'Nombre:',
-                    name: 'nomI',
+                    name: 'nombre',
                     type: 'text'
                 },
                 {
-                    label: 'Direccion:',
-                    name: 'direI',
+                    label: 'Apellido:',
+                    name: 'apellido',
                     type: 'text'
                 },
                 {
-                    label: 'Correo:',
-                    name: 'emailI',
+                    label: 'Nombre de Usuario Deloitte:',
+                    name: 'user',
                     type: 'text'
                 },
                 {
-                    label: 'Telefono:',
-                    name: 'telI',
+                    label: 'Correo Electrónico:',
+                    name: 'correo',
                     type: 'text'
                 },
                 {
-                    label: 'Tipo:',
-                    name: 'tipoI',
+                    label: 'Rol:',
+                    name: 'rol',
                     type: 'select',
-                    options: [{
-                            val: 1,
-                            text: 'Pública'
-                        },
+                    options: [
                         {
                             val: 2,
-                            text: 'Privada'
-                        },
-                        {
-                            val: 3,
-                            text: 'ONG'
+                            text: 'Solicitante'
+                        },{
+                            val: 1,
+                            text: 'Administrador'
                         }
                     ]
                 },
@@ -160,17 +181,20 @@ var app = new Vue({
             cargarDatos() {
                 var id = $("#idDetalle").val();
 
-                fetch("../controladorInstitucion?op=getInstitucion&id=" + id)
+                fetch("?1=UsuarioController&2=cargarDatosUsuario&id=" + id)
                     .then(response => {
                         return response.json();
                     })
                     .then(dat => {
-                        $('#frmEditar input[name="idDetalle"]').val(dat.id);
-                        $('#frmEditar input[name="nomI"]').val(dat.NombreInstitucion);
-                        $('#frmEditar input[name="direI"]').val(dat.Direccion);
-                        $('#frmEditar input[name="emailI"]').val(dat.Correo);
-                        $('#frmEditar input[name="telI"]').val(dat.Telefono);
-                        $('#frmEditar select[name="tipoI"]').dropdown('set selected', dat.idTipo);
+
+                        console.log(dat);
+
+                        // $('#frmEditar input[name="idDetalle"]').val(dat.codigoUsuari);
+                        $('#frmEditar input[name="nombre"]').val(dat.nombre);
+                        $('#frmEditar input[name="apellido"]').val(dat.apellido);
+                        $('#frmEditar input[name="user"]').val(dat.nomUsuario);
+                        $('#frmEditar input[name="correo"]').val(dat.email);
+                        $('#frmEditar select[name="rol"]').dropdown('set selected', dat.codigoRol);
                     })
                     .catch(err => {
                         console.log(err);
@@ -190,5 +214,41 @@ var app = new Vue({
             $('#idDetalle').val($(this).attr("id"));
             app.cargarDatos();
         });
+
+        $(document).on("click", ".btnAutorizar", function () {
+            $('#modalAutorizar').modal('setting', 'closable', false).modal('show');
+            $('#idAutorizar').val($(this).attr("id"));
+        });
+</script>
+
+
+<script>
+    $(function() {
+        $('#btnAutorizar').click(function() {
+
+            var idUsuario = $('#idAutorizar').val();
+
+           $.ajax({
+               type: 'POST',
+               url: '?1=UsuarioController&2=autorizar',
+               data: {
+                   id: idUsuario
+               },
+               success: function(r) {
+                   if(r == 1) {
+                    swal({
+                            title: 'Autorizado',
+                            text: 'Los cambios han sido guardados',
+                            type: 'success',
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                        $('#modalAutorizar').modal('hide');
+                        app.refrescarTabla();
+                   }
+               }
+           });
+        });
+    });
 </script>
      

@@ -68,6 +68,22 @@ end
 $$
 
 delimiter $$
+create procedure registrarUsuario(
+	in nom varchar(50),
+    in ape varchar(50),
+    in us varchar(50),
+    in correo varchar(75),
+    in rol int,
+    in idUser int
+)
+begin
+	update usuario
+    set nombre = nom, apellido = ape, nomUsuario = us, email = correo, codigoRol = rol
+    where codigoUsuario = idUser;
+end
+$$
+
+delimiter $$
 create procedure mostrarUsuarios()
 begin
 	select u.*, r.descRol, a.descAuth
