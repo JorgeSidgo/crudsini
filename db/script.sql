@@ -68,7 +68,7 @@ end
 $$
 
 delimiter $$
-create procedure registrarUsuario(
+create procedure editarUsuario(
 	in nom varchar(50),
     in ape varchar(50),
     in us varchar(50),
