@@ -22,9 +22,9 @@ class DaoCliente extends DaoBase
             $btnEditar = '<button id=\"'.$fila["codigoCliente"].'\" class=\"ui btnEditar icon blue small button\"><i class=\"edit icon\"></i></button>';
             $btnEliminar = '<button id=\"'.$fila["codigoCliente"].'\" class=\"ui btnEliminar icon negative small button\"><i class=\"trash icon\"></i></button>';
 
-           // $acciones = ', "Acciones": "'.$btnEditar.' '.$btnEliminar.'"';
+            $acciones = ', "Acciones": "'.$btnEditar.' '.$btnEliminar.'"';
 
-           // $object = substr_replace($object, $acciones, strlen($object) -1, 0);
+            $object = substr_replace($object, $acciones, strlen($object) -1, 0);
 
             $_json .= $object.',';
         }

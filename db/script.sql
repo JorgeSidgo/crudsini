@@ -27,6 +27,13 @@ create table authUsuario(
     descAuth varchar(25)
 );
 
+create table clientes(
+	codigoCliente int primary key unique auto_increment,
+    nombreCliente varchar(50),
+    direccion varchar(100),
+    telefono varchar(20)
+);
+
 -- ===========================================================================
 -- RELACIONES
 -- ===========================================================================
@@ -46,7 +53,9 @@ insert into rol values (null, 'Solicitante');
 insert into authUsuario values (null, 'Autorizado');
 insert into authUsuario values (null, 'Esperando Autorizacion');
 
-
+insert into clientes values(null,'Telefónica','San Salvador','2314-1231');
+insert into clientes values(null,'YKK','Santa Ana','2451-2312');
+insert into clientes values(null,'Don Pollo','Santa Tecla','2451-6969');
 # Usuario
 
 insert into usuario values (null, 'Karla Guadalupe', 'Arevalo Vega', 'kgarevalo', 'kgarevalo@deloitte.com', 'Deloite123!', 1, 1);
@@ -93,5 +102,13 @@ begin
 end
 $$
 
+delimiter $$
+create procedure mostrarClientes()
+begin
+	select * from clientes;
+end
+$$
 
-call mostrarUsuarios()
+-- drop table clientes;
+call mostrarClientes();
+call mostrarUsuarios();
